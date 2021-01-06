@@ -13,33 +13,20 @@ exports.create = (text, callback) => {
       callback(null, { id, text });
     });
   });
-  // items[id] = text;
-  // callback(null, { id, text });
 };
-// exports.create = (text, callback) => {
-//   counter.getNextUniqueId((err, id) => {
-//     fs.writeFile(`./test/testData/${id}.txt`, text, () => {
-//       console.log('callback id: ', id, 'text: ', text)
-//       callback(null, { id, text });
-//     })
-//   });
-// };
-
-// const readCounter = (callback) => {
-//   fs.readFile(exports.counterFile, (err, fileData) => {
-//     if (err) {
-//       callback(null, 0);
-//     } else {
-//       callback(null, Number(fileData));
-//     }
-//   });
-// };
 
 exports.readAll = (callback) => {
-  var data = _.map(items, (text, id) => {
-    return { id, text };
+  fs.readdir(`./test/testData`, (err, array) => {
+    var output = [];
+    array.forEach((item) => {
+      var obj = {};
+      var splitName = item.split('.txt')[0];
+      obj.id = splitName;
+      obj.text = splitName;
+      output.push(obj);
+    });
+    callback(null, output);
   });
-  callback(null, data);
 };
 
 exports.readOne = (id, callback) => {
