@@ -40,13 +40,22 @@ exports.readOne = (id, callback) => {
 };
 
 exports.update = (id, text, callback) => {
-  var item = items[id];
-  if (!item) {
-    callback(new Error(`No item with id: ${id}`));
-  } else {
-    items[id] = text;
-    callback(null, { id, text });
-  }
+  // var item = items[id];
+  // if (!item) {
+  //   callback(new Error(`No item with id: ${id}`));
+  // } else {
+  //   items[id] = text;
+  //   callback(null, { id, text });
+  // }
+  fs.readFile(`./test/testData/${id}.txt`, 'utf8', (err, todo) => {
+    if (err) {
+      callback(new Error(`No item with id: ${id}`));
+    } else {
+      fs.writeFile(`./test/testData/${id}.txt`, text, () => {
+        callback(null, { id, text });
+      });
+    }
+  });
 };
 
 exports.delete = (id, callback) => {
