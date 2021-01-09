@@ -18,14 +18,18 @@ exports.create = (text, callback) => {
 exports.readAll = (callback) => {
   fs.readdir(`./test/testData`, (err, array) => {
     var output = [];
-    array.forEach((item) => {
+    Promise.all(array.map((item) => {
       var obj = {};
       var splitName = item.split('.txt')[0];
       obj.id = splitName;
-      obj.text = splitName;
-      output.push(obj);
-    });
-    callback(null, output);
+      obj.text = fs.readFileSync(`./test/testData/${item}`, 'utf8', (err, data) => {
+        obj.text = data;
+      });
+      return obj;
+    }))
+      .then((data) => {
+        callback(null, data);
+      });
   });
 };
 
