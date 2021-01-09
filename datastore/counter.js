@@ -16,14 +16,25 @@ const zeroPaddedNumber = (num) => {
 };
 
 const readCounter = (callback) => {
-
-  fs.readFile(exports.counterFile, (err, fileData) => {
-    if (err) {
-      callback(null, 0);
-    } else {
-      callback(null, Number(fileData));
-    }
+  return new Promise(function(resolve, reject) {
+    fs.readFile(exports.counterFile, (err, fileData) => {
+      if (err) {
+        reject(callback(err));
+      } else {
+        resolve(Number(fileData));
+      }
+    });
   });
+
+  // return new Promise(function(resolve, reject) {
+  //   fs.readFile(filePath, 'utf8', (err, data) => {
+  //     if (err) {
+  //       reject(err);
+  //     } else {
+  //       resolve(data.split('\n')[0]);
+  //     }
+  //   });
+  // });
 };
 
 const writeCounter = (count, callback) => {
